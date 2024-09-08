@@ -11,6 +11,18 @@ This project is a real-time transcription application that uses the OpenAI Whisp
 to convert speech input into text output. It can be used to transcribe both live audio
 input from microphone and pre-recorded audio files.
 
+##Steps to run for Darshan
+- Step1: Make two terminals.
+- Step2: Run 
+  ```bash
+  python run_server.py --port 9090 \
+                        --backend faster_whisper 
+  ```
+- Step3: Run
+  ```bash
+  python examples/example_client.py
+  ```
+
 ## Installation
 - Install PyAudio and ffmpeg
 ```bash

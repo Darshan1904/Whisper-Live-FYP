@@ -94,7 +94,7 @@ class VoiceActivityDetection():
         return stacked.cpu()
 
     @staticmethod
-    def download(model_url="https://github.com/snakers4/silero-vad/raw/master/files/silero_vad.onnx"):
+    def download(model_url="https://github.com/snakers4/silero-vad/raw/v4.0/files/silero_vad.onnx"):
         target_dir = os.path.expanduser("~/.cache/whisper-live/")
 
         # Ensure the target directory exists
@@ -120,6 +120,7 @@ class VoiceActivityDetector:
 
         Args:
             threshold (float, optional): The probability threshold for detecting voice activity. Defaults to 0.5.
+            frame_rate (int, optional): The frame rate of the audio. Defaults to 16000.
         """
         self.model = VoiceActivityDetection()
         self.threshold = threshold
@@ -138,5 +139,20 @@ class VoiceActivityDetector:
             bool: True if the speech probability exceeds the threshold, indicating the presence of voice activity;
                   False otherwise.
         """
-        speech_prob = self.model(torch.from_numpy(audio_frame), self.frame_rate).item()
+        # Create a writable copy of the input array
+        audio_frame = np.array(audio_frame, copy=True)
+        
+        # Convert numpy array to torch tensor
+        audio_tensor = torch.from_numpy(audio_frame).float()
+        
+        # Ensure the tensor is 2D (add batch dimension if necessary)
+        if audio_tensor.dim() == 1:
+            audio_tensor = audio_tensor.unsqueeze(0)
+        
+        # Call the model
+        out = self.model(audio_tensor, self.frame_rate)
+        
+        # Get the speech probability (last value of the output)
+        speech_prob = out[0, -1].item()
+        
         return speech_prob > self.threshold

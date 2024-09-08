@@ -496,6 +496,7 @@ class ServeClientBase(object):
             segments (list): A list of transcription segments to be sent to the client.
         """
         try:
+            print("Sending transcription to client")
             self.websocket.send(
                 json.dumps({
                     "uid": self.client_uid,
