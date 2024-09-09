@@ -1,3 +1,4 @@
+import os
 import argparse
 from whisper_live.server import TranscriptionServer
 
@@ -5,7 +6,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--port', '-p',
                         type=int,
-                        default=9090,
+                        default=int(os.getenv("PORT", 9090)),  # Use Render's provided port or default to 9090
                         help="Websocket port to run the server on.")
     parser.add_argument('--backend', '-b',
                         type=str,
