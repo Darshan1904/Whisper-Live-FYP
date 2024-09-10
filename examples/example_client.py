@@ -24,7 +24,7 @@ def sample_callback(text, is_final):
     print(text[-1], end='', flush=True)
 
 client = TranscriptionClient(
-  "localhost",
+  "https://whisper-live-fyp.onrender.com",
   9090,
   lang="en",
   translate=False,
